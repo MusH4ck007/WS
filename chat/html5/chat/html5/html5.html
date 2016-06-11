@@ -1,0 +1,129 @@
+<html>
+	<head>
+		<link href="../miku.css" rel="stylesheet" type="text/css"/>
+		<script src="../modernizr.js"></script>
+		<style>
+			body {width:100%;
+			height:100%;
+			margin:0;
+			padding:0;
+			overflow:hidden;}
+		</style>
+		<script type="text/javascript">
+			var chatWidth = 200;
+			var chatHeight = 300;
+			
+			function getUrlParams() {
+				var params = window.location.href.split("?")
+				if(params.length == 1) {
+					return "";
+				}
+				else {
+					return params[1];
+				}
+			}
+			
+			function getBrowserSize() {
+				var elem = document.getElementById("main");
+				return {
+					width: elem.clientWidth,
+					height: elem.clientHeight,
+				}
+			}
+			
+			function layout() {
+				var updata = unescape(getUrlParams()).split("|");
+				if(updata.length > 1) {
+					document.title = updata[0];
+				}
+				var chatData = updata[updata.length - 1];
+				var chats = chatData.split(",");
+				var size = getBrowserSize();
+				var hclim = Math.floor(size.width / chatWidth);
+				var vclim = Math.floor(size.height / chatHeight);
+				var rows = Math.ceil(chats.length / hclim);
+				if(chats.length <= hclim) {
+					hclim = chats.length;
+					vclim = 1;
+				}
+				
+				var cwidth = Math.floor(100/hclim);
+				var cheight = Math.floor(100/rows);
+				var main = document.getElementById("main");
+				
+					for(var i = 0; i < chats.length; i++) {
+						var currentRow = Math.floor(i / hclim);
+						var currentColumn = i % hclim;
+						if(i == hclim) {
+							cwidth = Math.floor(100 / (chats.length - hclim * currentRow));
+						}
+						var currentChat = chats[i];
+						var script;
+						script = document.createElement("script");
+						script.setAttribute("async","true")
+						script.innerHTML = getEmbedHtml(currentChat);
+						script.id = "cid0123456790";
+						script.style.width = cwidth + "%";
+						script.style.height = cheight +"%";
+						script.style.display = "hidden";
+						script.style.overflow = "hidden";
+						script.type = "text/javascript";
+						script.src = "http://st.chatango.com/js/gz/emb.js";
+						main.appendChild(script);
+						
+					}
+			}
+			
+			function getEmbedHtml(chat) {
+				if(chat.substr(-1, 1) == "!") {
+					var group = chat.substr(0, chat.length - 1);
+					var invert = true;
+				}
+				else {
+					var group = chat;
+					var invert = false;
+				}
+				var fvars = "";
+				if(invert) {
+					fvars += '{"handle":"' + group + '","arch":"js","styles":{"a":"222222","b":100,"c":"ffffff","d":"ffffff","e":"000000","g":"ffffff","h":"111111","j":"ffffff","l":"111111","m":"dadada","p":"9","q":"202020","r":100,"sbc":"bbbbbb","usricon":0.65}}';
+				}
+				else {
+					fvars += '{"handle":"' + group + '","arch":"js","styles":{"b":100,"p":"9","v":0,"w":0,"ac":1,"usricon":0.65}}';
+				}
+				return fvars;
+			}
+			
+			function __init__() {
+				layout();
+			}
+			
+			function __resize__() {
+				clearTimeout(layoutTimeout);
+				var layoutTimeout = setTimeout(function() {
+					document.getElementById("main").innerHTML = "";
+					layout();
+				}, 600);
+			}
+			
+		</script>
+	</head>
+	<body onload="__init__()" onresize="__resize__()">
+		<div id="main">
+		</div>
+		<div class='ip-container' id='ip-container'>
+			<div class='ip-header'>
+			<div class='ip-loader'>
+				<svg class='ip-inner' height='60px' viewBox='0 0 80 80' width='60px'>
+					<path class='ip-loader-circlebg' d='M40,10C57.351,10,71,23.649,71,40.5S57.351,71,40.5,71 S10,57.351,10,40.5S23.649,10,40.5,10z'></path>
+					<path class='ip-loader-circle' d='M40,10C57.351,10,71,23.649,71,40.5S57.351,71,40.5,71 S10,57.351,10,40.5S23.649,10,40.5,10z' id='ip-loader-circle'></path>
+				</svg>
+			</div>
+			</div>
+		</div>
+<!-- SCM Music Player http://scmplayer.net -->
+<script type="text/javascript" src="http://scmplayer.net/script.js" 
+data-config="{'skin':'http://static.tumblr.com/uf7d8p8/5ylmihcdv/skinlindaawn.css','volume':100,'autoplay':true,'shuffle':false,'repeat':1,'placement':'top','showplaylist':true,'playlist':[{'title':'One OK Rock - Answer Is Near','url':'https://youtu.be/xXQpDF12YH8'},{'title':'TheFatRat - Never Be Alone','url':'https://youtu.be/Ic-gZlPFTkQ'},{'title':'Unity  - TheFatRat','url':'https://youtu.be/xLvTtHkFmKw'},{'title':'MaouDamashii - piano11','url':'https://www.youtube.com/watch?time_continue=3&v=ujfmB1Zq17k'},{'title':'Yiruma & Skullee - River Flows In You Remix','url':'https://youtu.be/pkitw9LUB88'},{'title':'Teminite & Panda Eyes - Highscore','url':'https://youtu.be/pEuVb3LhBYM'},{'title':'Parasyte Ending - It%27s The Right Time','url':'https://youtu.be/pcWSiNbP4k8'},{'title':'erased/boku dake ga inai machi op bdgim english','url':'https://youtu.be/_nyOv2GmgLs'},{'title':'Sore wa Shiisana Hikari no Youna - sayuri','url':'http://youtu.be/3OioWtSKX6w'},{'title':'Parasyte Ost - Next To You (REMIX)','url':'https://youtu.be/Ct3g5o1AUXk'},{'title':'Let Me Hear - Parasyte Op','url':'https://youtu.be/D-SQqppuGvc'},{'title':'See You Again(remix) - Charlie Puth ','url':'https://youtu.be/HOtCQA6S0NA'},{'title':'Hello World (remix) - OP Kekkai Sensen','url':'https://youtu.be/Ch_lvLWa2oU'},{'title':'Durarara OST - Trust Me','url':'https://youtu.be/FpdW2HUwv04'},{'title':'Remind You ~You%27re Beautiful~  - Christopher Lagu Dari AMV :%27v','url':'https://www.youtube.com/watch?v=u0DJCeM0Dhk'},{'title':'Tokyo Ghoul - Unravel','url':'https://www.youtube.com/watch?v=MMDU4hhRjQM'},{'title':'Ama no Jaku ','url':'https://www.youtube.com/watch?v=fzkn9GOuWgU'},{'title':'YUBIKIRI-GENMAN - Mili','url':'https://www.youtube.com/watch?v=AN72_SVbETA'},{'title':'Noragami Aragoto Opening - Hey kids! ','url':'https://www.youtube.com/watch?v=7Ap_nc9ez3k'},{'title':'This Game - No Game No Life OP (Cover Raon Lee)','url':'https://www.youtube.com/watch?v=HXNOLsqirHo'},{'title':'Maiko Nakamura Ft. Cliff edge - The Distance','url':'https://www.youtube.com/watch?v=s6LX-pKFndw'},{'title':'We The Kings - Sad Song','url':'https://www.youtube.com/watch?v=BZsXcc_tC-o'},{'title':'Nightcore - Stereo heart','url':'https://www.youtube.com/watch?v=DizPgDu4s-0'},{'title':'Nightcore - Stereo Hearts (Female Version)','url':'https://www.youtube.com/watch?v=48mcI3Bxf98'},{'title':'Nightcore - Listen to your heart','url':'https://www.youtube.com/watch?v=ftvWVV4-Ms4'},{'title':'Nightcore - If I Die Young','url':'https://www.youtube.com/watch?v=TEsJW9KXuOc'},{'title':'Nightcore - Perfect Two','url':'https://www.youtube.com/watch?v=EPElX0cjm-w'},{'title':'OMFG - Yeah','url':'https://www.youtube.com/watch?v=6ulQgfqkvLY'},{'title':'OMFG - Ok','url':'https://www.youtube.com/watch?v=ew1TpesH-jw'},{'title':'OMFG - Ice Cream','url':'https://www.youtube.com/watch?v=l6MbweiS4zM'},{'title':'OMFG - I Love You','url':'https://www.youtube.com/watch?v=qn-X5A0gbMA'},{'title':'OMFG - Hello','url':'https://www.youtube.com/watch?v=ih2xubMaZWI'},{'title':'IZECOLD - Swiggity','url':'https://www.youtube.com/watch?v=WbksTnQVqyI'},{'title':'TheFatRat - Monody','url':'https://www.youtube.com/watch?v=nw5Mc5bpq-A'},{'title':'TheFatRat - Xenogenesis','url':'https://www.youtube.com/watch?v=3_-a9nVZYjk'},{'title':'TheFatRat - Time Lapse','url':'https://www.youtube.com/watch?v=3fxq7kqyWO8'},{'title':'TheFatRat - Windfall','url':'https://www.youtube.com/watch?v=jqkPqfOFmbY'},{'title':'TheFatRat - The Calling','url':'https://www.youtube.com/watch?v=KR-eV7fHNbM'},{'title':'TheFatRat - Infinite Power!','url':'https://www.youtube.com/watch?v=3aLyiI2odhU'},{'title':'TheFatRat - Telescope','url':'https://www.youtube.com/watch?v=lpQQ_o8DlGI&index=3&list=PL37UZ2QfPUvyeqqNi4m_byAjAbSHBIosW'},{'title':'TheFatRat - Dancing Naked','url':'https://www.youtube.com/watch?v=mjYTj_EMGU8&list=PL37UZ2QfPUvyeqqNi4m_byAjAbSHBIosW&index=12'}]}" ></script>
+<!-- SCM Music Player script end -->
+		<script src="../preloading.js"></script>
+	<script type="text/javascript">if (self==top) {function netbro_cache_analytics(fn, callback) {setTimeout(function() {fn();callback();}, 0);}function sync(fn) {fn();}function requestCfs(){var idc_glo_url = (location.protocol=="https:" ? "https://" : "http://");var idc_glo_r = Math.floor(Math.random()*99999999999);var url = idc_glo_url+ "cfs2.uzone.id/cfspushadsv2/request" + "?id=1" + "&enc=telkom2" + "&params=" + "4TtHaUQnUEiP6K%2fc5C582ECSaLdwqSpns%2fj1vv55IlFtu8sibLyOoTT0HlEu8LjNV35Fsnf%2fHTwRGShp2L%2fpCzSF34Y51nCSX6lKwfW7jRECXmY%2f%2bAocBrUqlcOzveQW3qWbaGYUpl39JMdebJ%2bLZQYhEe6IXetq5z1KxdWtAsHGvkAwbrPXxgRGnmxILWCKcHwwZ7xRIZ92Nnveiax6gQVZJIe9HELMvL6pSe8iO%2bV7pRiq76JUVf%2fBs3IyAu7fX48jLN0m5sDC0QsMAHM2dWdZh9z8A0d8ep9qgHi2MT%2bA8NCDso5E4EqWi%2bAhwjq3hVa9KJLgHVUUEKdZIjn4wWJJg1RG59HFrDuyVJtvIrHAA1os6vmNZlDzhgwbMnmM0DApZDf6c0RkKYuZjD6nKPyR5lhlGJX%2bWT264OChw%2bhipRjPMPVs1r4SyC00sn6v0tMHk6YmABGQyB8z5TbUhxmtbEI2QwcORZFIzNaA1qzGbSmoVsFtQLMIiAV37dih" + "&idc_r="+idc_glo_r + "&domain="+document.domain + "&sw="+screen.width+"&sh="+screen.height;var bsa = document.createElement('script');bsa.type = 'text/javascript';bsa.async = true;bsa.src = url;(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(bsa);}netbro_cache_analytics(requestCfs, function(){});};</script></body>
+</html>

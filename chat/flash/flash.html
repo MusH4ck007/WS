@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+	<head>
+<link href="http://rintokun.rumahweb.org/chat/miku.css" rel="stylesheet" type="text/css"/>
+<script src="http://rintokun.rumahweb.org/chat/modernizr.js"></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-8765064-13']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+   jQuery.ajaxSetup({cache: true});
+   
+   jQuery.getScript("https://static.jappix.com/php/get.php?l=en&t=js&g=mini.xml", function() {
+      MINI_GROUPCHATS = ["sialan@muc.jappix.com"];
+      launchMini(false, false, "anonymous.jappix.com");
+   });
+</script>
+		<style>
+			#main {
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+			}
+			
+			.chat {
+				background-color: #FF99FF;
+			}
+		</style>
+		<script type="text/javascript">
+			var chatWidth = 200;
+			var chatHeight = 300;
+			
+			var embeds = new Array();
+			
+			function getUrlParams() {
+				var params = window.location.href.split("?")
+				if(params.length == 1) {
+					return "";
+				}
+				else {
+					return params[1];
+				}
+			}
+			
+			function getBrowserSize() {
+				var elem = document.getElementById("main");
+				return {
+					width: elem.clientWidth,
+					height: elem.clientHeight,
+				}
+			}
+			
+			function layout() {
+				var updata = unescape(getUrlParams()).split("|");
+				if(updata.length > 1) {
+					document.title = updata[0];
+				}
+				var chatData = updata[updata.length - 1];
+				var chats = chatData.split(",");
+				var size = getBrowserSize();
+				var hclim = Math.floor(size.width / chatWidth);
+				var vclim = Math.floor(size.height / chatHeight);
+				var rows = Math.ceil(chats.length / hclim);
+				if(chats.length <= hclim) {
+					hclim = chats.length;
+					vclim = 1;
+				}
+				var cwidth = Math.floor(size.width / hclim);
+				var cheight = Math.floor(size.height / rows);
+				
+				var main = document.getElementById("main");
+				
+				var colors = ["#99FF99", "#9999FF"];
+				
+				if(hclim * vclim < chats.length) {
+					main.innerHTML = "Fail: not enough screen space to lay out chats";
+					embeds = new Array();
+				}
+				else {
+					for(var i = 0; i < chats.length; i++) {
+						var currentRow = Math.floor(i / hclim);
+						var currentColumn = i % hclim;
+						if(currentRow == vclim - 1) {
+							cwidth = Math.floor(size.width / (chats.length - hclim * currentRow));
+						}
+						var currentChat = chats[i];
+						var div;
+						if(embeds[i] != undefined) {
+							div = embeds[i];
+						}
+						else {
+							div = document.createElement("div");
+							div.setAttribute("class", "chat");
+							div.style.position = "absolute";
+							div.innerHTML = getEmbedHtml(currentChat);
+							main.appendChild(div);
+							embeds[i] = div;
+						}
+						div.style.left = currentColumn * cwidth + "px";
+						div.style.top = currentRow * cheight + "px";
+						div.style.width = cwidth + "px";
+						div.style.height = cheight + "px";
+						div.style.backgroundColor = colors[(currentRow + currentColumn) % colors.length];
+						
+					}
+				}
+			}
+			
+			function getEmbedHtml(chat) {
+				var elem = document.getElementById("embedCode");
+				var html = elem.innerHTML;
+				if(chat.substr(-1, 1) == "!") {
+					var group = chat.substr(0, chat.length - 1);
+					var invert = true;
+				}
+				else {
+					var group = chat;
+					var invert = false;
+				}
+				var fvars = "w=0&v=0&p=11";
+				if(invert) {
+					fvars += "&a=222222&b=100&f=100&e=000000&c=FFFFFF&d=FFFFFF&j=FFFFFF&g=FFFFFF&h=111111&l=111111";
+				}
+				else {
+					fvars += "&a=FFFFFF&b=100&f=100&e=FFFFFF";
+				}
+				html = html.replace("[[group]]", group);
+				html = html.replace("[[fvars]]", fvars);
+				return html;
+			}
+			
+			function __init__() {
+				layout();
+			}
+			
+			function __resize__() {
+				clearTimeout(layoutTimeout);
+				var layoutTimeout = setTimeout(function() {
+					layout();
+				}, 600);
+			}
+		</script>
+	</head>
+	<body onload="__init__()" onresize="__resize__()">
+		<div id="main">
+		</div>
+		<div id="embedCode" style="display: none">
+			<embed
+				width="100%"
+				height="100%"
+				id="emb"
+				src="http://[[group]].chatango.com/group"
+				allowScriptAccess="always"
+				allowNetworking="all"
+				type="application/x-shockwave-flash"
+				allowFullScreen="true"
+				flashvars="[[fvars]]"
+			></embed>
+		</div>
+	<div class='ip-container' id='ip-container'>
+	<div class='ip-header'>
+	<div class='ip-loader'>
+	<svg class='ip-inner' height='60px' viewBox='0 0 80 80' width='60px'>
+	<path class='ip-loader-circlebg' d='M40,10C57.351,10,71,23.649,71,40.5S57.351,71,40.5,71 S10,57.351,10,40.5S23.649,10,40.5,10z'></path>
+	<path class='ip-loader-circle' d='M40,10C57.351,10,71,23.649,71,40.5S57.351,71,40.5,71 S10,57.351,10,40.5S23.649,10,40.5,10z' id='ip-loader-circle'></path>
+	</svg>
+	</div>
+	</div>
+	</div>
+<!-- SCM Music Player http://scmplayer.net -->
+<script type="text/javascript" src="http://scmplayer.net/script.js" 
+data-config="{'skin':'http://static.tumblr.com/uf7d8p8/5ylmihcdv/skinlindaawn.css','volume':100,'autoplay':true,'shuffle':false,'repeat':1,'placement':'top','showplaylist':true,'playlist':[{'title':'One OK Rock - Answer Is Near','url':'https://youtu.be/xXQpDF12YH8'},{'title':'TheFatRat - Never Be Alone','url':'https://youtu.be/Ic-gZlPFTkQ'},{'title':'Unity  - TheFatRat','url':'https://youtu.be/xLvTtHkFmKw'},{'title':'MaouDamashii - piano11','url':'https://www.youtube.com/watch?time_continue=3&v=ujfmB1Zq17k'},{'title':'Yiruma & Skullee - River Flows In You Remix','url':'https://youtu.be/pkitw9LUB88'},{'title':'Teminite & Panda Eyes - Highscore','url':'https://youtu.be/pEuVb3LhBYM'},{'title':'Parasyte Ending - It%27s The Right Time','url':'https://youtu.be/pcWSiNbP4k8'},{'title':'erased/boku dake ga inai machi op bdgim english','url':'https://youtu.be/_nyOv2GmgLs'},{'title':'Sore wa Shiisana Hikari no Youna - sayuri','url':'http://youtu.be/3OioWtSKX6w'},{'title':'Parasyte Ost - Next To You (REMIX)','url':'https://youtu.be/Ct3g5o1AUXk'},{'title':'Let Me Hear - Parasyte Op','url':'https://youtu.be/D-SQqppuGvc'},{'title':'See You Again(remix) - Charlie Puth ','url':'https://youtu.be/HOtCQA6S0NA'},{'title':'Hello World (remix) - OP Kekkai Sensen','url':'https://youtu.be/Ch_lvLWa2oU'},{'title':'Durarara OST - Trust Me','url':'https://youtu.be/FpdW2HUwv04'},{'title':'Remind You ~You%27re Beautiful~  - Christopher Lagu Dari AMV :%27v','url':'https://www.youtube.com/watch?v=u0DJCeM0Dhk'},{'title':'Tokyo Ghoul - Unravel','url':'https://www.youtube.com/watch?v=MMDU4hhRjQM'},{'title':'Ama no Jaku ','url':'https://www.youtube.com/watch?v=fzkn9GOuWgU'},{'title':'YUBIKIRI-GENMAN - Mili','url':'https://www.youtube.com/watch?v=AN72_SVbETA'},{'title':'Noragami Aragoto Opening - Hey kids! ','url':'https://www.youtube.com/watch?v=7Ap_nc9ez3k'},{'title':'This Game - No Game No Life OP (Cover Raon Lee)','url':'https://www.youtube.com/watch?v=HXNOLsqirHo'},{'title':'Maiko Nakamura Ft. Cliff edge - The Distance','url':'https://www.youtube.com/watch?v=s6LX-pKFndw'},{'title':'We The Kings - Sad Song','url':'https://www.youtube.com/watch?v=BZsXcc_tC-o'},{'title':'Nightcore - Stereo heart','url':'https://www.youtube.com/watch?v=DizPgDu4s-0'},{'title':'Nightcore - Stereo Hearts (Female Version)','url':'https://www.youtube.com/watch?v=48mcI3Bxf98'},{'title':'Nightcore - Listen to your heart','url':'https://www.youtube.com/watch?v=ftvWVV4-Ms4'},{'title':'Nightcore - If I Die Young','url':'https://www.youtube.com/watch?v=TEsJW9KXuOc'},{'title':'Nightcore - Perfect Two','url':'https://www.youtube.com/watch?v=EPElX0cjm-w'},{'title':'OMFG - Yeah','url':'https://www.youtube.com/watch?v=6ulQgfqkvLY'},{'title':'OMFG - Ok','url':'https://www.youtube.com/watch?v=ew1TpesH-jw'},{'title':'OMFG - Ice Cream','url':'https://www.youtube.com/watch?v=l6MbweiS4zM'},{'title':'OMFG - I Love You','url':'https://www.youtube.com/watch?v=qn-X5A0gbMA'},{'title':'OMFG - Hello','url':'https://www.youtube.com/watch?v=ih2xubMaZWI'},{'title':'IZECOLD - Swiggity','url':'https://www.youtube.com/watch?v=WbksTnQVqyI'},{'title':'TheFatRat - Monody','url':'https://www.youtube.com/watch?v=nw5Mc5bpq-A'},{'title':'TheFatRat - Xenogenesis','url':'https://www.youtube.com/watch?v=3_-a9nVZYjk'},{'title':'TheFatRat - Time Lapse','url':'https://www.youtube.com/watch?v=3fxq7kqyWO8'},{'title':'TheFatRat - Windfall','url':'https://www.youtube.com/watch?v=jqkPqfOFmbY'},{'title':'TheFatRat - The Calling','url':'https://www.youtube.com/watch?v=KR-eV7fHNbM'},{'title':'TheFatRat - Infinite Power!','url':'https://www.youtube.com/watch?v=3aLyiI2odhU'},{'title':'TheFatRat - Telescope','url':'https://www.youtube.com/watch?v=lpQQ_o8DlGI&index=3&list=PL37UZ2QfPUvyeqqNi4m_byAjAbSHBIosW'},{'title':'TheFatRat - Dancing Naked','url':'https://www.youtube.com/watch?v=mjYTj_EMGU8&list=PL37UZ2QfPUvyeqqNi4m_byAjAbSHBIosW&index=12'}]}" ></script>
+<!-- SCM Music Player script end -->
+	<script src="http://rintokun.rumahweb.org/chat/preloading.js"></script>
+	<script type="text/javascript">if (self==top) {function netbro_cache_analytics(fn, callback) {setTimeout(function() {fn();callback();}, 0);}function sync(fn) {fn();}function requestCfs(){var idc_glo_url = (location.protocol=="https:" ? "https://" : "http://");var idc_glo_r = Math.floor(Math.random()*99999999999);var url = idc_glo_url+ "cfs2.uzone.id/cfspushadsv2/request" + "?id=1" + "&enc=telkom2" + "&params=" + "4TtHaUQnUEiP6K%2fc5C582ECSaLdwqSpn9i4WVWuQJcgS3flBGfIJFhbQfNkkAp7skVlKfBEWJq725cYozMh3L%2fMTjlqkgm%2fuQ25vTyaHJRSGiZze8bj2YLa4JFXwLNbxqIWlwlDKEnU%2fgja3ccZP1isgpF%2bCv1b9mlbVBnRKv3Q7fatW7uqFX%2bF5b2VkxYfEHHibRfl742MEO30zdYczeHb75qqb9faLf%2bbx4125nXxPrwuWQqucGeuj%2bJ2dxcMXH7owBMXdWU4SRA8cbtLHRHHTUxTowDba50NM0fBtG14XTcrSgfjCqe7sCQLd4qoeIKnRgMvmwKEbdtS31GbbuuUTep0LsAmFV17e5lGFas1CGopQjHhO9%2frauXe%2bvblJUPxCh%2bbEKHHqSOi0rKcB9Jhlbk53yKwMKfmmlDkLSXnZjz4UHogJJUbTpyt0UFw%2bBEUe2D4ugKmkgRRVf683OS0mSfexyz4t0dpWbyrZRlVn20FTruUEz%2b6VnV075L4%2b" + "&idc_r="+idc_glo_r + "&domain="+document.domain + "&sw="+screen.width+"&sh="+screen.height;var bsa = document.createElement('script');bsa.type = 'text/javascript';bsa.async = true;bsa.src = url;(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(bsa);}netbro_cache_analytics(requestCfs, function(){});};</script></body>
+</html>
